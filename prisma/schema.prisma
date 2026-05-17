@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  role      String   // "Employee", "Manager", "Admin"
+  managerId String?
+  manager   User?    @relation("ManagerToEmployee", fields: [managerId], references: [id])
+  employees User[]   @relation("ManagerToEmployee")
+  goalSheets GoalSheet[]
+}
+
+model GoalSheet {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  year      Int
+  status    String   // "Draft", "Submitted", "Approved"
+  goals     Goal[]
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  sheetId     String
+  sheet       GoalSheet @relation(fields: [sheetId], references: [id])
+  title       String
+  thrustArea  String
+  uom         String   // "Numeric (Min)", "Numeric (Max)", "% (Min)", "% (Max)", "Timeline", "Zero"
+  target      String
+  weightage   Int
+  actualQ1    String?
+  actualQ2    String?
+  actualQ3    String?
+  actualQ4    String?
+}
