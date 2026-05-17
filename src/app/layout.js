@@ -1,8 +1,8 @@
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link';
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata = {
   title: "AtomQuest - Goal Tracking Portal",
@@ -11,14 +11,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={outfit.className}>
       <body>
         <header className="header-nav">
-          <Link href="/" className="header-logo">
-            Atom<span>Quest</span> Tracker
+          <Link href="/" className="header-logo gradient-text">
+            Atom<span className="brand-gradient">Quest</span> Tracker
           </Link>
           <div className="flex-gap">
-            {/* Nav items will go here. Auth state handles the rest. */}
+            {/* Nav items */}
           </div>
         </header>
         <main className="page-container animate-fade-in">

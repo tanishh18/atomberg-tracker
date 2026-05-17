@@ -48,13 +48,13 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="glass-card">
-        <h2 style={{ marginBottom: '16px' }}>Organization Overview</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <h2 style={{ marginBottom: '24px' }}>Organization Overview</h2>
+        <table className="modern-table">
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
-              <th style={{ padding: '12px 8px' }}>Employee</th>
-              <th style={{ padding: '12px 8px' }}>Manager</th>
-              <th style={{ padding: '12px 8px' }}>Status</th>
+            <tr>
+              <th>Employee</th>
+              <th>Manager</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -62,10 +62,10 @@ export default async function AdminDashboard() {
               const sheet = emp.goalSheets[0];
               const status = sheet ? sheet.status : 'Not Started';
               return (
-                <tr key={emp.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '12px 8px' }}>{emp.name}</td>
-                  <td style={{ padding: '12px 8px' }}>{emp.manager?.name || '-'}</td>
-                  <td style={{ padding: '12px 8px' }}>
+                <tr key={emp.id}>
+                  <td style={{ fontWeight: '500' }}>{emp.name}</td>
+                  <td style={{ color: 'var(--text-muted)' }}>{emp.manager?.name || '-'}</td>
+                  <td>
                     <span className={`status-badge status-${status.toLowerCase().replace(' ', '-')}`}>
                       {status}
                     </span>

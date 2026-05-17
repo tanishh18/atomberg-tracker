@@ -18,12 +18,13 @@ model User {
 }
 
 model GoalSheet {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  year      Int
-  status    String   // "Draft", "Submitted", "Approved"
-  goals     Goal[]
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  year           Int
+  status         String   // "Draft", "Submitted", "Approved"
+  managerComment String?
+  goals          Goal[]
 }
 
 model Goal {

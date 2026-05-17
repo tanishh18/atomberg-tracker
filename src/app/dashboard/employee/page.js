@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { cookies } from 'next/headers';
 import GoalSheetForm from '@/components/GoalSheetForm';
+import QuarterlyUpdateForm from '@/components/QuarterlyUpdateForm';
 import { redirect } from 'next/navigation';
 
 export default async function EmployeeDashboard() {
@@ -16,11 +17,11 @@ export default async function EmployeeDashboard() {
 
   return (
     <div>
-      <h1 style={{ marginBottom: '24px' }}>My Goals - {currentYear}</h1>
+      <h1 style={{ marginBottom: '32px' }}>My Goals <span style={{ color: 'var(--text-muted)', fontWeight: '400' }}>{currentYear}</span></h1>
       
       {!goalSheet || goalSheet.status === 'Draft' ? (
         <div className="glass-card">
-          <h2 style={{ marginBottom: '16px' }}>{goalSheet ? 'Edit' : 'Create'} Goal Sheet</h2>
+          <h2 style={{ marginBottom: '24px' }}>{goalSheet ? 'Edit' : 'Create'} Goal Sheet</h2>
           <GoalSheetForm 
             userId={userId} 
             existingSheet={goalSheet} 
@@ -29,35 +30,46 @@ export default async function EmployeeDashboard() {
         </div>
       ) : (
         <div className="glass-card">
-          <div className="flex-between" style={{ marginBottom: '16px' }}>
+          <div className="flex-between" style={{ marginBottom: '24px' }}>
             <h2>Goals Overview</h2>
             <span className={`status-badge status-${goalSheet.status.toLowerCase()}`}>
               {goalSheet.status}
             </span>
           </div>
           
-          <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '16px' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
-                <th style={{ padding: '12px 8px' }}>Title</th>
-                <th style={{ padding: '12px 8px' }}>Thrust Area</th>
-                <th style={{ padding: '12px 8px' }}>UoM</th>
-                <th style={{ padding: '12px 8px' }}>Target</th>
-                <th style={{ padding: '12px 8px' }}>Weightage</th>
-              </tr>
-            </thead>
-            <tbody>
-              {goalSheet.goals.map((goal, idx) => (
-                <tr key={idx} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '12px 8px' }}>{goal.title}</td>
-                  <td style={{ padding: '12px 8px' }}>{goal.thrustArea}</td>
-                  <td style={{ padding: '12px 8px' }}>{goal.uom}</td>
-                  <td style={{ padding: '12px 8px' }}>{goal.target}</td>
-                  <td style={{ padding: '12px 8px' }}>{goal.weightage}%</td>
+          {goalSheet.status === 'Submitted' && (
+            <table className="modern-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Thrust Area</th>
+                  <th>UoM</th>
+                  <th>Target</th>
+                  <th>Weightage</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {goalSheet.goals.map((goal, idx) => (
+                  <tr key={idx}>
+                    <td>{goal.title}</td>
+                    <td>{goal.thrustArea}</td>
+                    <td>{goal.uom}</td>
+                    <td>{goal.target}</td>
+                    <td>{goal.weightage}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {goalSheet.status === 'Approved' && (
+            <div style={{ marginTop: '16px' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>
+                Your goals have been approved. Please log your actual achievements at the end of each quarter.
+              </p>
+              <QuarterlyUpdateForm goals={goalSheet.goals} />
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -61,3 +61,39 @@ export async function submitGoalSheet(formData) {
     return { error: 'Failed to submit goals' };
   }
 }
+
+export async function updateQuarterlyActuals(actuals) {
+  try {
+    for (const actual of actuals) {
+      await prisma.goal.update({
+        where: { id: actual.id },
+        data: {
+          actualQ1: actual.actualQ1,
+          actualQ2: actual.actualQ2,
+          actualQ3: actual.actualQ3,
+          actualQ4: actual.actualQ4,
+        }
+      });
+    }
+    revalidatePath('/dashboard/employee');
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { error: 'Failed to update actuals' };
+  }
+}
+
+export async function saveManagerComment(sheetId, formData) {
+  const comment = formData.get('comment');
+  try {
+    await prisma.goalSheet.update({
+      where: { id: sheetId },
+      data: { managerComment: comment }
+    });
+    revalidatePath('/dashboard/manager');
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { error: 'Failed to save comment' };
+  }
+}
